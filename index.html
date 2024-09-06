@@ -71,8 +71,10 @@
         <li class="animals"><a href="contest.html">Contest</a></li>
         <li class="animals"><a href="random.html">The Cursed Page</a></li>
         <li class="animals"><a style="color: lime" href="https://forms.gle/hw1u2WKQ7sSgRbUi6">Contest Vote! (Vote for one of the 4 options)</a></li>
+        <li class="animals"><a></a></li>
+        <li class="animals"><a></a></li>
     </ul> 
-    <button id="jakeFryerButton">Log Out</button>
+    <button id="logout">Log Out</button>
 </div>
 
 <script>
@@ -167,7 +169,7 @@
         }
     });
 
-    document.getElementById("jakeFryerButton").addEventListener("click", function() {
+    document.getElementById("logout").addEventListener("click", function() {
         // Remove the passcodeEntered variable from localStorage
         localStorage.removeItem("passcodeEntered");
         
