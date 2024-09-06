@@ -105,7 +105,7 @@
         const lockoutDuration = 30 * 60 * 1000; // 30 minutes in milliseconds
 
         const passcode = document.getElementById("passcode").value;
-        const encodedPasscode = btoa(hEncode(passcode));
+        const encodedPasscode = btoa(hEncode(hEncode(passcode)));
 
         let attempts = parseInt(localStorage.getItem("attempts") || "0");
         let lockoutTime = parseInt(localStorage.getItem("lockoutTime") || "0");
