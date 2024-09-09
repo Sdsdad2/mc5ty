@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Iceman</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="IMG_1486.png" />
+<link rel="apple-touch-icon" sizes="192x192" href="IMG_1486.png"> 
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+  /* Add any additional styling here */
+</style>
+</head>
+<body>
+  <div class="topnav">
+    <a href="index.html">Home</a>
+    <a href="games.html">Games</a>
+    <a href="proxy.html">Proxys</a>
+    <a href="other.html">Other</a>
+    <a class="active" href="random.html">The Vault</a>
+  </div>
+
+  <ul id='list'> 
+      <li class="animals"><a>The Vault</a></li>
+  </ul> 
+
+  <div id="vault-content">
+    <h2>Enter Vault Password</h2>
+    <form id="passwordForm">
+      <input type="password" id="passwordInput" placeholder="Enter password">
+      <button type="submit">Submit</button>
+    </form>
+    <p id="vaultMessage"></p>
+  </div>
+
+  <script>
+    // Hardcoded password dictionary
+    const vault = {
+      'Vault': 'Yes, this is the vault.',
+      'Password': 'Very original. Try it though.',
+      'StopPlease': 'Why?',
+      'Aidan': 'Ah, you know the owner, now do you?.',
+    };
+
+    // Function to handle password entry
+    document.getElementById('passwordForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const password = document.getElementById('passwordInput').value;
+      const message = document.getElementById('vaultMessage');
+
+      if (vault[password]) {
+        message.textContent = vault[password];
+      } else {
+        message.textContent = 'Invalid password. Try again.';
+      }
+
+      // Clear the input
+      document.getElementById('passwordInput').value = '';
+    });
+  </script>
+</body>
+</html>
