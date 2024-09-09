@@ -25,7 +25,7 @@
   <div id="vault-content">
     <h2 style="color: blue;">Type and guess a code.</h2>
     <form id="passwordForm">
-      <input type="password" id="passwordInput" placeholder="Enter password">
+      <input type="text" id="passwordInput" placeholder="Enter password">
       <button type="submit">Submit</button>
     </form>
     <p id="vaultMessage"></p>
@@ -34,12 +34,16 @@
   <script>
     // Hardcoded password dictionary
     const vault = {
-      'Vault': 'Yes, this is the vault.',
-      'Password': 'Very unoriginal, but nice. Try one you know though.',
-      'StopPlease': 'Why?',
-      'Aidan': 'Ah, you know the owner, now do you?.',
-      'CLEARLY': 'You got that hint! Nice one!',
-      'Nope!': 'How dare you? Whatever though...',
+      'vault': 'Yes, this is the vault.',
+      'password': 'Very unoriginal, but nice. Try one you know though.',
+      'stop': 'Why?',
+      'aidan': 'Ah, you know the owner, now do you?.',
+      'clearly': 'You got that hint! Nice one!',
+      'nope': 'Nope what? Whatever though, you got it right...',
+      'cheeseland': 'My enemy...',
+      'calvin': 'Cheeseland maker.',
+      'jake': 'Duffman maker.',
+      'duffman': 'Yea, I stole that idea and made it better. Jake Fryer is the one to thank.',
     };
 
     const incorrectMessages = [
@@ -51,13 +55,15 @@
       'Congratulations! You won nothing!',
       'Maybe try "Password" since you CLEARLY cant get it right.',
       'Nope!',
-      'Even I can guess these!'
+      'Even I can guess these!',
+      'This is embarraasing! Even Calvin Rossi can help!',
+      'Now its to the point where you need Jake Fryer!',
     ];
 
     // Function to handle password entry
     document.getElementById('passwordForm').addEventListener('submit', function(event) {
       event.preventDefault();
-      const password = document.getElementById('passwordInput').value;
+      const password = document.getElementById('passwordInput').value.toLowerCase(); // Convert input to lowercase
       const message = document.getElementById('vaultMessage');
 
       if (vault[password]) {
