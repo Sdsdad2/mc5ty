@@ -42,7 +42,21 @@
       'Password': 'Very original. Try it though.',
       'StopPlease': 'Why?',
       'Aidan': 'Ah, you know the owner, now do you?.',
+      'CLEARLY': 'You got that hint! Nice one!',
+      'Nope!': 'How dare you? Whatever though...',
     };
+
+    const incorrectMessages = [
+      'Wrong password! Try again.',
+      'That doesn’t look right!',
+      'Nope, that’s not it.',
+      'You can do this! Or not.',
+      'Horribly guessed, not even close!',
+      'Congratulations! You won nothing!',
+      'Maybe try "Password" since you CLEARLY cant get it right.',
+      'Nope!',
+      'Even I can guess these!'
+    ];
 
     // Function to handle password entry
     document.getElementById('passwordForm').addEventListener('submit', function(event) {
@@ -53,7 +67,9 @@
       if (vault[password]) {
         message.textContent = vault[password];
       } else {
-        message.textContent = 'Invalid password. Try again.';
+        // Choose a random incorrect message
+        const randomIndex = Math.floor(Math.random() * incorrectMessages.length);
+        message.textContent = incorrectMessages[randomIndex];
       }
 
       // Clear the input
