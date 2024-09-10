@@ -39,8 +39,7 @@
     </div>
     
     <div id="namePrompt" style="display: none;">
-      <h3>You've found all the codes! Please fill out this form:</h3>
-      <a id="googleFormLink" href="https://forms.gle/Y76weLDVrjowLb9r6" target="_blank">Fill out the form</a>
+      <h3 href="https://forms.gle/Y76weLDVrjowLb9r6" target="_blank">You found all the codes! Click here to fill out the google form.</h3>
     </div>
     
     <div id="completedList">
@@ -83,6 +82,23 @@
     const completedUsersList = document.getElementById('completedUsers');
     const namePrompt = document.getElementById('namePrompt');
 
+    // Static list of completed users
+    const completedUsers = [
+      'Aidan Harris',
+      'Canden Wiatrowski',
+      'Calvin Rossi',
+    ];
+
+    // Function to display completed users
+    function displayCompletedUsers() {
+      completedUsersList.innerHTML = '';
+      completedUsers.forEach(name => {
+        const li = document.createElement('li');
+        li.textContent = name;
+        completedUsersList.appendChild(li);
+      });
+    }
+
     // Function to display completed codes
     function displayCompletedCodes() {
       correctCodesList.innerHTML = '';
@@ -101,12 +117,15 @@
       }
     }
 
-    // Call displayCompletedCodes when the page loads
+    // Call displayCompletedUsers and displayCompletedCodes when the page loads
+    displayCompletedUsers();
     displayCompletedCodes();
 
     // Show name prompt if user has completed all codes and it’s not already set in localStorage
-    if (localStorage.getItem('vaultCompleted') === 'true') {
-      namePrompt.style.display = 'block';
+    if (localStorage.getItem('vaultCompleted') !== 'true') {
+      checkIfAllCodesCompleted();
+    } else {
+      namePrompt.style.display = 'none';
     }
 
     // Submit password form handler
