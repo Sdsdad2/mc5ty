@@ -120,6 +120,9 @@
       if (allCodesCompleted) {
         localStorage.setItem('vaultCompleted', 'true');
         namePrompt.style.display = 'block';
+      } else {
+        localStorage.setItem('vaultCompleted', 'false');
+        namePrompt.style.display = 'none';
       }
     }
 
@@ -127,12 +130,8 @@
     displayCompletedUsers();
     displayCompletedCodes();
 
-    // Show name prompt if user has completed all codes and it’s not already set in localStorage
-    if (localStorage.getItem('vaultCompleted') === 'true') {
-      namePrompt.style.display = 'block';
-    } else {
-      checkIfAllCodesCompleted();
-    }
+    // Check the vault status and update the namePrompt visibility
+    checkIfAllCodesCompleted();
 
     // Submit password form handler
     document.getElementById('passwordForm').addEventListener('submit', function(event) {
