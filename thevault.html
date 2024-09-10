@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Iceman</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="IMG_1486.png" />
-<link rel="apple-touch-icon" sizes="192x192" href="IMG_1486.png"> 
-<link rel="manifest" href="manifest.json">
-<meta name="mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-  /* Add any additional styling here */
-</style>
+  <title>Iceman</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="IMG_1486.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="IMG_1486.png"> 
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    /* Add any additional styling here */
+  </style>
 </head>
 <body>
   <div class="topnav">
@@ -23,16 +23,31 @@
   </div>
 
   <div id="vault-content">
-    <h2 style="color: blue;">Type and guess a code.</h2>
+    <h2 style="color: blue;">Type and guess a code. Get all of them and be able to suggest more.</h2>
     <form id="passwordForm">
       <input type="text" id="passwordInput" placeholder="Enter password">
       <button type="submit">Submit</button>
     </form>
     <p id="vaultMessage"></p>
+    
+    <div id="codesFound">
+      <h3>Codes you've gotten so far:</h3>
+      <ul id="correctCodes"></ul>
+    </div>
+    
+    <div id="namePrompt" style="display: none;">
+      <h3>You've found all the codes! What's your name?</h3>
+      <input type="text" id="nameInput" placeholder="Enter your name">
+      <button id="submitName">Submit Name</button>
+    </div>
+    
+    <div id="completedList">
+      <h3>People who completed the vault:</h3>
+      <ul id="completedUsers"></ul>
+    </div>
   </div>
 
   <script>
-    // Hardcoded password dictionary
     const vault = {
       'vault': 'Yes, this is the vault.',
       'password': 'Very unoriginal, but nice. Try one you know though.',
@@ -56,26 +71,71 @@
       'Maybe try "Password" since you CLEARLY cant get it right.',
       'Nope!',
       'Even I can guess these!',
-      'This is embarraasing! Even Calvin Rossi can help!',
-      'Now its to the point where you need Jake Fryer!',
     ];
 
-    // Function to handle password entry
+    let completedCodes = [];
+    const vaultMessage = document.getElementById('vaultMessage');
+    const correctCodesList = document.getElementById('correctCodes');
+    const completedUsersList = document.getElementById('completedUsers');
+    const namePrompt = document.getElementById('namePrompt');
+    
+    const sheetURL = 'https://script.google.com/macros/s/AKfycbzipqVzTFKrnzrDWTtM6P_4YtMnrnEYyLGfDrcVPcxI81cggktXKNlliSuMo-xO0c43uQ/exec'; // Replace with your Web App URL
+
+    // Function to fetch the completed users list from Google Sheets
+    function fetchCompletedUsers() {
+      fetch(sheetURL)
+        .then(response => response.json())
+        .then(data => {
+          completedUsersList.innerHTML = '';
+          data.forEach(name => {
+            const li = document.createElement('li');
+            li.textContent = name;
+            completedUsersList.appendChild(li);
+          });
+        });
+    }
+
+    // Call fetchCompletedUsers when the page loads
+    fetchCompletedUsers();
+
+    // Submit password form handler
     document.getElementById('passwordForm').addEventListener('submit', function(event) {
       event.preventDefault();
-      const password = document.getElementById('passwordInput').value.toLowerCase(); // Convert input to lowercase
-      const message = document.getElementById('vaultMessage');
+      const password = document.getElementById('passwordInput').value.toLowerCase();
 
       if (vault[password]) {
-        message.textContent = vault[password];
+        if (!completedCodes.includes(password)) {
+          completedCodes.push(password);
+          const li = document.createElement('li');
+          li.textContent = password;
+          correctCodesList.appendChild(li);
+        }
+        vaultMessage.textContent = vault[password];
+        if (Object.keys(vault).length === completedCodes.length) {
+          namePrompt.style.display = 'block';
+        }
       } else {
-        // Choose a random incorrect message
         const randomIndex = Math.floor(Math.random() * incorrectMessages.length);
-        message.textContent = incorrectMessages[randomIndex];
+        vaultMessage.textContent = incorrectMessages[randomIndex];
       }
 
-      // Clear the input
       document.getElementById('passwordInput').value = '';
+    });
+
+    // Submit name form handler
+    document.getElementById('submitName').addEventListener('click', function() {
+      const name = document.getElementById('nameInput').value;
+      if (name) {
+        fetch(sheetURL, {
+          method: 'POST',
+          body: new URLSearchParams({ name: name })
+        })
+        .then(response => response.text())
+        .then(() => {
+          fetchCompletedUsers(); // Refresh the list of completed users
+          namePrompt.style.display = 'none';
+        });
+      }
     });
   </script>
 </body>
