@@ -39,8 +39,8 @@
     </div>
     
     <div id="namePrompt" style="display: none;">
-      <h3>You've found all the codes! Please submit your name using the form below:</h3>
-      <a href="https://forms.gle/Y76weLDVrjowLb9r6" target="_blank">Submit your name here</a>
+      <h3>You've found all the codes! Please fill out this form:</h3>
+      <a id="googleFormLink" href="https://forms.gle/Y76weLDVrjowLb9r6" target="_blank">Fill out the form</a>
     </div>
     
     <div id="completedList">
@@ -103,12 +103,10 @@
 
     // Call displayCompletedCodes when the page loads
     displayCompletedCodes();
-    
+
     // Show name prompt if user has completed all codes and it’s not already set in localStorage
-    if (localStorage.getItem('vaultCompleted') !== 'true') {
-      checkIfAllCodesCompleted();
-    } else {
-      namePrompt.style.display = 'none';
+    if (localStorage.getItem('vaultCompleted') === 'true') {
+      namePrompt.style.display = 'block';
     }
 
     // Submit password form handler
