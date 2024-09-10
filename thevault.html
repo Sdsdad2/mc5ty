@@ -39,8 +39,7 @@
     </div>
     
     <div id="namePrompt" style="display: none;">
-      <h3>You found all the codes! Please fill out this form:</h3>
-      <a id="formLink" href="https://forms.gle/Y76weLDVrjowLb9r6" target="_blank">Google Form</a>
+      <h3><a href="https://forms.gle/Y76weLDVrjowLb9r6" target="_blank">Google Form</a></h3>
     </div>
     
     <div id="completedList">
@@ -116,7 +115,9 @@
 
     // Function to check if all codes are completed
     function checkIfAllCodesCompleted() {
-      if (Object.keys(vault).length === completedCodes.length) {
+      const allCodes = Object.keys(vault);
+      const allCodesCompleted = allCodes.every(code => completedCodes.includes(code));
+      if (allCodesCompleted) {
         localStorage.setItem('vaultCompleted', 'true');
         namePrompt.style.display = 'block';
       }
