@@ -78,7 +78,7 @@
       'Now its to the point where you need Jake Fryer!',
     ];
 
-    let completedCodes = [];
+    let completedCodes = JSON.parse(localStorage.getItem('completedCodes')) || [];
     const vaultMessage = document.getElementById('vaultMessage');
     const correctCodesList = document.getElementById('correctCodes');
     const completedUsersList = document.getElementById('completedUsers');
@@ -100,8 +100,19 @@
         });
     }
 
+    // Function to display completed codes
+    function displayCompletedCodes() {
+      correctCodesList.innerHTML = '';
+      completedCodes.forEach(code => {
+        const li = document.createElement('li');
+        li.textContent = code;
+        correctCodesList.appendChild(li);
+      });
+    }
+
     // Call fetchCompletedUsers when the page loads
     fetchCompletedUsers();
+    displayCompletedCodes();
 
     // Submit password form handler
     document.getElementById('passwordForm').addEventListener('submit', function(event) {
@@ -111,9 +122,8 @@
       if (vault[password]) {
         if (!completedCodes.includes(password)) {
           completedCodes.push(password);
-          const li = document.createElement('li');
-          li.textContent = password;
-          correctCodesList.appendChild(li);
+          localStorage.setItem('completedCodes', JSON.stringify(completedCodes));
+          displayCompletedCodes();
         }
         vaultMessage.textContent = vault[password];
         if (Object.keys(vault).length === completedCodes.length) {
