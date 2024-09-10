@@ -83,7 +83,7 @@
     const correctCodesList = document.getElementById('correctCodes');
     const completedUsersList = document.getElementById('completedUsers');
     const namePrompt = document.getElementById('namePrompt');
-    
+
     const sheetURL = 'https://script.google.com/macros/s/AKfycbzipqVzTFKrnzrDWTtM6P_4YtMnrnEYyLGfDrcVPcxI81cggktXKNlliSuMo-xO0c43uQ/exec'; // Replace with your Web App URL
 
     // Function to fetch the completed users list from Google Sheets
@@ -111,9 +111,24 @@
       });
     }
 
+    // Function to check if all codes are completed
+    function checkIfAllCodesCompleted() {
+      if (Object.keys(vault).length === completedCodes.length) {
+        localStorage.setItem('vaultCompleted', 'true');
+        namePrompt.style.display = 'block';
+      }
+    }
+
     // Call fetchCompletedUsers and displayCompletedCodes when the page loads
     fetchCompletedUsers();
     displayCompletedCodes();
+    
+    // Show name prompt if user has completed all codes and it’s not already set in localStorage
+    if (localStorage.getItem('vaultCompleted') !== 'true') {
+      checkIfAllCodesCompleted();
+    } else {
+      namePrompt.style.display = 'none';
+    }
 
     // Submit password form handler
     document.getElementById('passwordForm').addEventListener('submit', function(event) {
@@ -127,9 +142,7 @@
           displayCompletedCodes();
         }
         vaultMessage.textContent = vault[password];
-        if (Object.keys(vault).length === completedCodes.length) {
-          namePrompt.style.display = 'block';
-        }
+        checkIfAllCodesCompleted();
       } else {
         const randomIndex = Math.floor(Math.random() * incorrectMessages.length);
         vaultMessage.textContent = incorrectMessages[randomIndex];
