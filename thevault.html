@@ -39,9 +39,8 @@
     </div>
     
     <div id="namePrompt" style="display: none;">
-      <h3>You've found all the codes! What's your name?</h3>
-      <input type="text" id="nameInput" placeholder="Enter your name">
-      <button id="submitName">Submit Name</button>
+      <h3>You've found all the codes! Please fill out this form:</h3>
+      <a href="YOUR_GOOGLE_FORM_LINK" target="_blank" id="formLink">Submit your name</a>
     </div>
     
     <div id="completedList">
@@ -84,22 +83,8 @@
     const completedUsersList = document.getElementById('completedUsers');
     const namePrompt = document.getElementById('namePrompt');
 
-    const sheetURL = 'https://script.google.com/macros/s/AKfycbzipqVzTFKrnzrDWTtM6P_4YtMnrnEYyLGfDrcVPcxI81cggktXKNlliSuMo-xO0c43uQ/exec'; // Replace with your Web App URL
-
-    // Function to fetch the completed users list from Google Sheets
-    function fetchCompletedUsers() {
-      fetch(sheetURL)
-        .then(response => response.json())
-        .then(data => {
-          completedUsersList.innerHTML = '';
-          data.forEach(name => {
-            const li = document.createElement('li');
-            li.textContent = name;
-            completedUsersList.appendChild(li);
-          });
-        })
-        .catch(error => console.error('Error fetching users:', error));
-    }
+    // Store the initial number of codes
+    const initialCodeCount = Object.keys(vault).length;
 
     // Function to display completed codes
     function displayCompletedCodes() {
@@ -111,21 +96,23 @@
       });
     }
 
-    // Function to check if all codes are completed
-    function checkIfAllCodesCompleted() {
-      if (Object.keys(vault).length === completedCodes.length) {
+    // Function to check if all initial codes are completed
+    function checkIfAllInitialCodesCompleted() {
+      if (completedCodes.length === initialCodeCount) {
         localStorage.setItem('vaultCompleted', 'true');
         namePrompt.style.display = 'block';
+      } else {
+        localStorage.removeItem('vaultCompleted');
+        namePrompt.style.display = 'none';
       }
     }
 
-    // Call fetchCompletedUsers and displayCompletedCodes when the page loads
-    fetchCompletedUsers();
+    // Call displayCompletedCodes when the page loads
     displayCompletedCodes();
     
-    // Show name prompt if user has completed all codes and it’s not already set in localStorage
+    // Show name prompt if user has completed all initial codes and it’s not already set in localStorage
     if (localStorage.getItem('vaultCompleted') !== 'true') {
-      checkIfAllCodesCompleted();
+      checkIfAllInitialCodesCompleted();
     } else {
       namePrompt.style.display = 'none';
     }
@@ -142,40 +129,13 @@
           displayCompletedCodes();
         }
         vaultMessage.textContent = vault[password];
-        checkIfAllCodesCompleted();
+        checkIfAllInitialCodesCompleted();
       } else {
         const randomIndex = Math.floor(Math.random() * incorrectMessages.length);
         vaultMessage.textContent = incorrectMessages[randomIndex];
       }
 
       document.getElementById('passwordInput').value = '';
-    });
-
-    // Submit name form handler
-    document.getElementById('submitName').addEventListener('click', function() {
-      const name = document.getElementById('nameInput').value;
-      if (name) {
-        fetch(sheetURL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: new URLSearchParams({ name: name })
-        })
-        .then(response => response.text())
-        .then(responseText => {
-          console.log('Response:', responseText); // Log the response for debugging
-          if (responseText.includes('Name added successfully')) {
-            fetchCompletedUsers(); // Refresh the list of completed users
-            namePrompt.style.display = 'none';
-          } else {
-            console.error('Error:', responseText); // Log any error messages
-          }
-        })
-        .catch(error => console.error('Fetch Error:', error)); // Log fetch errors
-      } else {
-        console.error('Error: Name input is empty');
-      }
     });
   </script>
 </body>
