@@ -39,7 +39,8 @@
     </div>
     
     <div id="namePrompt" style="display: none;">
-      <h3 href="https://forms.gle/Y76weLDVrjowLb9r6" target="_blank">You found all the codes! Click here to fill out the google form.</h3>
+      <h3>You found all the codes! Please fill out this form:</h3>
+      <a id="formLink" href="https://forms.gle/Y76weLDVrjowLb9r6" target="_blank">Google Form</a>
     </div>
     
     <div id="completedList">
@@ -60,8 +61,9 @@
       'calvin': 'Cheeseland maker.',
       'jake': 'Duffman maker.',
       'duffman': 'Yea, I stole that idea and made it better. Jake Fryer is the one to thank.',
-      'liam': 'Yeah, Jake gave duffman to him for no reason.',
+      'liam': 'Yea, Jake gave duffman to him for no reason.',
       'a113': 'You saw the hint, didnt you?',
+      'canden': 'Co-Owner time!',
     };
 
     const incorrectMessages = [
@@ -125,10 +127,10 @@
     displayCompletedCodes();
 
     // Show name prompt if user has completed all codes and it’s not already set in localStorage
-    if (localStorage.getItem('vaultCompleted') !== 'true') {
-      checkIfAllCodesCompleted();
+    if (localStorage.getItem('vaultCompleted') === 'true') {
+      namePrompt.style.display = 'block';
     } else {
-      namePrompt.style.display = 'none';
+      checkIfAllCodesCompleted();
     }
 
     // Submit password form handler
