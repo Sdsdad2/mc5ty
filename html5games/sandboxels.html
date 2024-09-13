@@ -29,12 +29,7 @@
     <a href="/other.html">Other</a>
   </div>
  
-  <div id="game-container" style="text-align: center;">
-    <a id="play" href="https://mcred2024.github.io/sandboxels" style="color: blue; font-size: 20px; text-decoration: none;">
-      <h1>PLAY</h1>
-    </a>
-    <div id="play-count" style="font-size: 14px; color: blue; text-align: center; margin-top: 5px;"></div>
-  </div>
+  <section id="gameContent"></section>
 
   <script>
     // Unique identifier for this game page
@@ -57,23 +52,34 @@
       } else {
         countText = "You have played this game " + playCount + " times.";
       }
-      document.getElementById('play-count').innerHTML = countText;
+      return `<div id='play-count' style='font-size: 14px; color: blue; text-align: center; margin-top: 5px;'>${countText}</div>`;
     }
 
-    // Only show the play button if passcode has been entered
-    if (passcodeEntered === 'true') {
-      document.getElementById('play').style.display = 'block';
-    } else {
-      document.getElementById('play').style.display = 'none';
-    }
+    // Set the content of the game based on passcodeEntered value
+    document.getElementById('gameContent').innerHTML = `
+      <style>
+        #play {
+          color: blue;
+          text-align: center;
+          text-decoration: none;
+          font-family: 'arial';
+          font-size: 27px;
+          display: ${passcodeEntered === 'true' ? 'block' : 'none'};
+          margin-bottom: 10px;
+        }
+      </style>
+      <div style='text-align: center;'>
+        <a id='play' href='/sandboxels'><h1>PLAY</h1></a>
+        ${updatePlayCount()}
+      </div>`;
 
-    // Update the play count on page load
-    updatePlayCount();
-
-    // Add event listener to update play count when play button is clicked
-    document.getElementById('play').addEventListener('click', function() {
-      playCount += 1;
-      localStorage.setItem('playCount_' + pageID, playCount);
+    // Add event listener for the play button
+    document.getElementById('gameContent').addEventListener('click', function(event) {
+      if (event.target.id === 'play') {
+        playCount += 1;
+        localStorage.setItem('playCount_' + pageID, playCount);
+        document.getElementById('gameContent').querySelector('#play-count').innerHTML = updatePlayCount();
+      }
     });
   </script>
 </body>
