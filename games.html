@@ -50,6 +50,12 @@
 </style>
 </head>
 <body>
+
+  <button class="tablink" onclick="openPage('All', this, 'blue')" id="defaultOpen">All</button>
+  <button class="tablink" onclick="openPage('Tycoon', this, 'blue')">Tycoon</button>
+  <button class="tablink" onclick="openPage('Idle', this, 'blue')">Idle</button>
+  <button class="tablink" onclick="openPage('2P', this, 'blue')">2P</button>
+
   <div class="topnav">
     <a href="index.html">Home</a>
     <a class="active" href="games.html">Games</a>
@@ -60,7 +66,7 @@
       <button type="submit" ><i class="fa fa-search"></i></button>
     </div>
   </div>
-    <div id="content">
+    <div id="All" class="tabcontent">
       <ul id='list'>
         <li class="animals"><a style="color: pink" href="contest.html">Block Blast Contest</a></li>
         <li class="animals" data-searchable="false"><a style="color: lime;">Green = Gamehub</a></li>
@@ -180,6 +186,56 @@
         <!--gamehub end-->
       </ul>
     </div>
+    <div id="Tycoon" class="tabcontent">
+      <ul id='list'>
+        <li class="animals" data-searchable="false"><a style="color: lime;">Green = Gamehub</a></li>
+        <li class="animals" data-searchable="false"><a style="color: red;">Red = Broken Repository</a></li>
+        <li class="animals" data-searchable="false"><a style="color: blue;">Blue = Repository</a></li>
+      </ul>
+    </div>
+    <div id="Tycoon" class="tabcontent">
+      <ul id='list'>
+        <li class="animals" data-searchable="false"><a style="color: lime;">Green = Gamehub</a></li>
+        <li class="animals" data-searchable="false"><a style="color: red;">Red = Broken Repository</a></li>
+        <li class="animals" data-searchable="false"><a style="color: blue;">Blue = Repository</a></li>
+      </ul>
+    </div>
+    <div id="Idle" class="tabcontent">
+      <ul id='list'>
+        <li class="animals" data-searchable="false"><a style="color: lime;">Green = Gamehub</a></li>
+        <li class="animals" data-searchable="false"><a style="color: red;">Red = Broken Repository</a></li>
+        <li class="animals" data-searchable="false"><a style="color: blue;">Blue = Repository</a></li>
+      </ul>
+    </div>
+    <div id="2P" class="tabcontent">
+      <ul id='list'>
+        <li class="animals" data-searchable="false"><a style="color: lime;">Green = Gamehub</a></li>
+        <li class="animals" data-searchable="false"><a style="color: red;">Red = Broken Repository</a></li>
+        <li class="animals" data-searchable="false"><a style="color: blue;">Blue = Repository</a></li>
+      </ul>
+    </div>
+    <div id="Sports" class="tabcontent">
+      <ul id='list'>
+        <li class="animals" data-searchable="false"><a style="color: lime;">Green = Gamehub</a></li>
+        <li class="animals" data-searchable="false"><a style="color: red;">Red = Broken Repository</a></li>
+        <li class="animals" data-searchable="false"><a style="color: blue;">Blue = Repository</a></li>
+      </ul>
+    </div>
+    <div id="Franchises" class="tabcontent">
+      <ul id='list'>
+        <li class="animals" data-searchable="false"><a style="color: lime;">Green = Gamehub</a></li>
+        <li class="animals" data-searchable="false"><a style="color: red;">Red = Broken Repository</a></li>
+        <li class="animals" data-searchable="false"><a style="color: blue;">Blue = Repository</a></li>
+      </ul>
+    </div>
+    <div id="Puzzle" class="tabcontent">
+      <ul id='list'>
+        <li class="animals" data-searchable="false"><a style="color: lime;">Green = Gamehub</a></li>
+        <li class="animals" data-searchable="false"><a style="color: red;">Red = Broken Repository</a></li>
+        <li class="animals" data-searchable="false"><a style="color: blue;">Blue = Repository</a></li>
+      </ul>
+    </div>
+
 
   <script>
     // Check if passcodeEntered is true in localStorage
