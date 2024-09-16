@@ -4,25 +4,29 @@
   <title>Iceman</title>
   <link rel='stylesheet' href='game.css'>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="/IMG_1486.png" />
-  <link rel="apple-touch-icon" sizes="192x192" href="IMG_1486.png"> 
+  
+  <!-- PWA manifest and icons -->
   <link rel="manifest" href="/manifest.json">
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  <link rel="icon" href="/IMG_1486.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="IMG_1486.png"> 
+
+  <meta name="theme-color" content="#000000">
+
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
   <style>
     #play-container {
       width: 100vw;
-      height: 100vh;
+      height: 100%;
     }
     section {
       width: 100%;
       height: 100vh;
-    }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
     }
   </style>
 </head>
@@ -38,7 +42,7 @@
 
   <script>
     // Unique identifier for this game page
-    var pageID = 'mcred2024.github.io/sandboxels'; // Full URL of the game
+    var pageID = 'mcred2024.github.io/sandboxels';
 
     // Check if the localStorage variable 'passcodeEntered' is set to true
     var passcodeEntered = localStorage.getItem('passcodeEntered');
@@ -75,7 +79,6 @@
       </style>
       <div style='text-align: center;'>
         <a id='play' href='/sandboxels'><h1>PLAY</h1></a>
-        <iframe id='game-iframe' src='' style='display:none;'></iframe>
         ${updatePlayCount()}
       </div>`;
 
@@ -85,18 +88,21 @@
         playCount += 1;
         localStorage.setItem('playCount_' + pageID, playCount);
         document.getElementById('gameContent').querySelector('#play-count').innerHTML = updatePlayCount();
-        
-        // Show the embedded iframe
-        var iframe = document.getElementById('game-iframe');
-        iframe.src = '/sandboxels'; // Embed the game in the iframe
-        iframe.style.display = 'block';
-
-        // Redirect to the full game page after a short delay
-        setTimeout(function() {
-          window.location.href = '/sandboxels';
-        }, 1000); // 1 second delay before redirect
       }
     });
+
+    // Register service worker for PWA support
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(function(registration) {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          })
+          .catch(function(error) {
+            console.log('ServiceWorker registration failed: ', error);
+          });
+      });
+    }
   </script>
 </body>
 </html>
