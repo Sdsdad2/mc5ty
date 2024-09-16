@@ -13,11 +13,16 @@
   <style>
     #play-container {
       width: 100vw;
-      height: 100%;
+      height: 100vh;
     }
     section {
       width: 100%;
       height: 100vh;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
     }
   </style>
 </head>
@@ -28,12 +33,12 @@
     <a href="/proxy.html">Proxys</a>
     <a href="/other.html">Other</a>
   </div>
- 
+
   <section id="gameContent"></section>
 
   <script>
     // Unique identifier for this game page
-    var pageID = 'mcred2024.github.io/sandboxels'; // Include the full URL here
+    var pageID = 'mcred2024.github.io/sandboxels'; // Full URL of the game
 
     // Check if the localStorage variable 'passcodeEntered' is set to true
     var passcodeEntered = localStorage.getItem('passcodeEntered');
@@ -69,7 +74,8 @@
         }
       </style>
       <div style='text-align: center;'>
-        <a id='play' href='/sandboxels'><h1>PLAY</h1></a>
+        <a id='play' href='#'><h1>PLAY</h1></a>
+        <iframe id='game-iframe' src='' style='display:none;'></iframe>
         ${updatePlayCount()}
       </div>`;
 
@@ -79,6 +85,16 @@
         playCount += 1;
         localStorage.setItem('playCount_' + pageID, playCount);
         document.getElementById('gameContent').querySelector('#play-count').innerHTML = updatePlayCount();
+        
+        // Show the embedded iframe
+        var iframe = document.getElementById('game-iframe');
+        iframe.src = '/sandboxels'; // Embed the game in the iframe
+        iframe.style.display = 'block';
+
+        // Redirect to the full game page after a short delay
+        setTimeout(function() {
+          window.location.href = '/sandboxels';
+        }, 1000); // 1 second delay before redirect
       }
     });
   </script>
