@@ -1,53 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>MCRed2024</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="IMG_1722.png" />
-<link rel="apple-touch-icon" sizes="192x192" href="IMG_1722.png"> 
-<link rel="manifest" href="manifest.json">
-<meta name="mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-#passcode-form {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
+    <title>MCRed2024</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="IMG_1722.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="IMG_1722.png"> 
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        #passcode-form {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
 
-.passcode-input {
-    width: 300px;
-    padding: 10px;
-    font-size: 18px;
-}
+        .passcode-input {
+            width: 300px;
+            padding: 10px;
+            font-size: 18px;
+        }
 
-#content {
-    display: none;
-}
+        #content {
+            display: none;
+        }
 
-#myTopnav {
-    display: none;
-}
-</style>
+        #myTopnav {
+            display: none;
+        }
+
+        #google-signin {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
 <div class="topnav" id="myTopnav">
-  <a class="active" href="index.html">Home</a>
-  <a href="games.html" id="games-link">Games</a>
-  <a href="proxy.html" id="proxy-link">Proxys</a>
-  <a href="other.html" id="other-link">Other</a>
-  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-    <i class="fa fa-bars"></i>
-  </a>
+    <a class="active" href="index.html">Home</a>
+    <a href="games.html" id="games-link">Games</a>
+    <a href="proxy.html" id="proxy-link">Proxys</a>
+    <a href="other.html" id="other-link">Other</a>
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+    </a>
 </div>
+
+<!-- Google Sign-In Button -->
+<div id="google-signin"></div>
 
 <!-- Passcode Authentication Form -->
 <div id="passcode-form">
@@ -70,9 +77,6 @@
         <li class="animals"><a href="contest.html">Block Blast Contest</a></li>
         <li class="animals"><a href="thevault.html">The Vault</a></li>
         <li class="animals"><a href="wipgames.html">Work In Progress Stuff</a></li>
-        <li class="animals"><a></a></li>
-        <li class="animals"><a></a></li>
-        <li class="animals"><a></a></li>
     </ul> 
     <button id="logout">Log Out</button>
 </div>
@@ -87,46 +91,14 @@
         document.getElementById("passcode-form").style.display = "none";
     }
 
-    function hEncode(str) {
-        let hStr = '';
-        for (let i = 0; i < str.length; i++) {
-            hStr += str.charCodeAt(i).toString(16);
-        }
-        return hStr;
-    }
-
-    function eEF(str) {
-        let result = '';
-        for (let i = 4; i < str.length; i += 5) {
-            result += str[i];
-        }
-        return result;
-    }
-
     async function authenticate() {
         const maxAttempts = 3;
         const lockoutDuration = 30 * 60 * 1000; // 30 minutes in milliseconds
-
         const passcode = document.getElementById("passcode").value;
         const encodedPasscode = btoa(hEncode(hEncode(passcode)));
 
         let attempts = parseInt(localStorage.getItem("attempts") || "0");
         let lockoutTime = parseInt(localStorage.getItem("lockoutTime") || "0");
-
-        function updateCountdown() {
-            const now = Date.now();
-            const timeLeft = lockoutTime - now;
-            if (timeLeft > 0) {
-                const minutes = Math.floor(timeLeft / 60000);
-                const seconds = Math.floor((timeLeft % 60000) / 1000);
-                document.getElementById("countdown-timer").textContent = `${minutes} minute(s) and ${seconds} second(s)`;
-                setTimeout(updateCountdown, 1000);
-            } else {
-                document.getElementById("lockout-message").style.display = "none";
-                localStorage.removeItem("lockoutTime");
-                localStorage.removeItem("attempts");
-            }
-        }
 
         if (Date.now() < lockoutTime) {
             document.getElementById("lockout-message").style.display = "block";
@@ -161,22 +133,67 @@
         }
     }
 
-    window.addEventListener('storage', function(event) {
-        if (event.key === "passcodeEntered" && event.newValue === "true") {
+    // Load Google Sign-In
+    function handleGoogleSignIn() {
+        google.accounts.id.initialize({
+            client_id: "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
+            callback: handleCredentialResponse
+        });
+        google.accounts.id.renderButton(
+            document.getElementById("google-signin"),
+            { theme: "outline", size: "large" }  // Customization attributes
+        );
+    }
+
+    function handleCredentialResponse(response) {
+        const userObject = jwt_decode(response.credential);
+        const userEmail = userObject.email;
+        checkBlacklist(userEmail);
+    }
+
+    async function checkBlacklist(email) {
+        let response = await fetch('https://raw.githubusercontent.com/MCRed2024/blacklist/main/blacklist.txt');
+        let blacklist = await response.text();
+        let blacklistArray = blacklist.split("\n").map(e => e.trim());
+
+        if (blacklistArray.includes(email)) {
+            alert("You are not allowed to sign in.");
+        } else {
+            alert("Sign-in successful! Welcome.");
             document.getElementById("content").style.display = "block";
             document.getElementById("myTopnav").style.display = "block";
-            document.getElementById("passcode-form").style.display = "none";
         }
-    });
+    }
+
+    window.addEventListener('load', handleGoogleSignIn);
 
     document.getElementById("logout").addEventListener("click", function() {
-        // Remove the passcodeEntered variable from localStorage
         localStorage.removeItem("passcodeEntered");
-        
-        // Reload the page
         location.reload();
     });
 </script>
 
+<!-- Firebase Initialization -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCetN92ziVziJp1Hfw1KzizjHuHJBDWCDo",
+        authDomain: "website-data-51e71.firebaseapp.com",
+        projectId: "website-data-51e71",
+        storageBucket: "website-data-51e71.appspot.com",
+        messagingSenderId: "947096653632",
+        appId: "1:947096653632:web:734f6fee873905a44bb4a5",
+        measurementId: "G-WW0C7RFV5K"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+</script>
+
+<!-- Google Sign-In Script -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.js"></script>
 </body>
 </html>
