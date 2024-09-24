@@ -81,7 +81,7 @@
         document.getElementById("myTopnav").style.display = "none";
 
         // Check for the passcodeEntered cookie
-        var passcodeEntered = getCookie("passcodeEntered");
+        var passcodeEntered = getCookie("passwordEntered");
         if (passcodeEntered === "true") {
             document.getElementById("content").style.display = "block";
             document.getElementById("myTopnav").style.display = "block";
@@ -165,7 +165,8 @@
             if (encodedPasscode === encodedPassword.trim()) {
                 document.getElementById("content").style.display = "block";
                 document.getElementById("myTopnav").style.display = "block";
-                setCookie("passcodeEntered", "true"); // Set cookie instead of localStorage
+                setCookie("passwordEntered", "true"); // Set cookie instead of localStorage
+                localStorage.setItem("passcodeEntered", "true");
                 document.getElementById("passcode-form").style.display = "none";
                 localStorage.removeItem("attempts");
             } else {
@@ -192,7 +193,7 @@
 
         document.getElementById("logout").addEventListener("click", function() {
             // Remove the passcodeEntered cookie
-            deleteCookie("passcodeEntered");
+            deleteCookie("passwordEntered");
 
             // Reload the page
             location.reload();
