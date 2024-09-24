@@ -34,11 +34,19 @@
   <iframe frameborder="0" id="gameFrame"></iframe>
 
   <script>
+    // Function to get a cookie by name
+    function getCookie(name) {
+      return document.cookie.split('; ').reduce((prev, current) => {
+        const [key, value] = current.split('=');
+        return key === name ? decodeURIComponent(value) : prev;
+      }, null);
+    }
+
     // Unique identifier for this game page
     var pageID = 'mcred2024.github.io/testing'; // Include the full URL here
 
-    // Check if the localStorage variable 'passcodeEntered' is set to true
-    var passcodeEntered = localStorage.getItem('passcodeEntered');
+    // Check if the passcodeEntered cookie is set to true
+    var passcodeEntered = getCookie('passcodeEntered');
 
     // Initialize play counter using the unique pageID
     var playCount = localStorage.getItem('playCount_' + pageID) || 0;
