@@ -34,11 +34,19 @@
   <iframe frameborder="0" id="gameFrame"></iframe>
 
   <script>
-    // Unique identifier for this game page
-    var pageID = 'biologyedu1808.github.io/g/awesome-tanks-2/'; // Include the full URL here
+    // Function to get a cookie by name
+    function getCookie(name) {
+      return document.cookie.split('; ').reduce((prev, current) => {
+        const [key, value] = current.split('=');
+        return key === name ? decodeURIComponent(value) : prev;
+      }, null);
+    }
 
-    // Check if the localStorage variable 'passcodeEntered' is set to true
-    var passcodeEntered = localStorage.getItem('passcodeEntered');
+    // Unique identifier for this game page
+    var pageID = 'biologyedu1808.github.io/awesome-tanks-2/'; // Include the full URL here
+
+    // Check if the passcodeEntered cookie is set to true
+    var passcodeEntered = getCookie('passcodeEntered');
 
     // Initialize play counter using the unique pageID
     var playCount = localStorage.getItem('playCount_' + pageID) || 0;
