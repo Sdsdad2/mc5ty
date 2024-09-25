@@ -75,11 +75,10 @@
         <button id="logout">Log Out</button>
     </div>
 
-    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/node-mailjet@3.3.0/dist/mailjet.min.js"></script>
     <script type="text/javascript">
-        (function(){
-            emailjs.init("WkrP3e7nsTbEms8N7"); // Your EmailJS public ID
-        })();
+        // Initialize Mailjet with your API keys
+        const mailjet = require('node-mailjet').connect('7f77536435aacc0a1170e47b5510ae6c', '3faa1ca2c5195a083882a961fb42ad78');
 
         async function sendVerification() {
             const email = document.getElementById("user-email").value;
@@ -94,19 +93,33 @@
             document.getElementById("verification-code").style.display = "block";
             document.getElementById("verify-button").style.display = "block";
 
-            // Send email using EmailJS
-            const templateParams = {
-                to_name: email,
-                verification_code: verificationCode,
-            };
+            // Send email using Mailjet
+            const request = await mailjet
+                .post('send', { 'version': 'v3.1' })
+                .request({
+                    Messages: [{
+                        From: {
+                            Email: 'minecraft.rubiks.spiderman@gmail.com',
+                            Name: 'MCRed2024 Team'
+                        },
+                        To: [{
+                            Email: email,
+                            Name: 'User'
+                        }],
+                        Subject: 'Email Verification',
+                        TextPart: `Hello, please type the code below to verify: ${verificationCode}`,
+                        HTMLPart: `<h3>Hello,</h3><p>Please type the code below to verify: <strong>${verificationCode}</strong></p>`
+                    }]
+                });
 
-            await emailjs.send('service_brahykb', 'template_by0inhz', templateParams)
-                .then(function() {
-                    console.log('Verification email sent successfully');
+            request
+                .then((result) => {
+                    console.log('Verification email sent successfully', result.body);
                     // Store the verification code temporarily
                     sessionStorage.setItem('verificationCode', verificationCode);
-                }, function(error) {
-                    console.error('Failed to send verification email: ', error);
+                })
+                .catch((err) => {
+                    console.error('Failed to send verification email: ', err);
                     alert('Failed to send verification email. Please try again.');
                 });
         }
