@@ -321,7 +321,8 @@
       </ul>
     </div>
   <script>
-    document.getElementById("defaultOpen").click()
+    checkPasscode();
+    document.getElementById("defaultOpen").click();
     // Check if passcodeEntered is true in localStorage
     var passcodeEntered = localStorage.getItem('passcodeEntered');
     if (passcodeEntered) {
@@ -342,6 +343,24 @@
       elmnt.style.backgroundColor = color;
     }
 
+    async function checkPasscode() {
+        const enteredPasscode = localStorage.getItem("enteredPasscode");
+        if (enteredPasscode) {
+          const hashedPasscode = CryptoJS.MD5(enteredPasscode).toString();
+          try {
+            const response = await fetch("https://raw.githubusercontent.com/MCRed2024/urlfetcher/main/fetcher.txt");
+            const rawText = await response.text();
+            if (hashedPasscode !== rawText) {
+              window.location.href = "index.html";
+            }
+          } catch (error) {
+            window.location.href = "index.html";
+          }
+        } else {
+          window.location.href = "index.html";
+        }
+      }
+    
     // Function to search games
     function search_animal() {
     var input, filter, ul, li, a, i, txtValue;
