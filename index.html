@@ -77,30 +77,31 @@
     <button id="logout">Log Out</button>
 </div>
 
+<!-- Supabase JS library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
 <script>
+    const SUPABASE_URL = 'YOUR_SUPABASE_URL'; // Replace with your Supabase URL
+    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your Supabase ANON key
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     document.getElementById("myTopnav").style.display = "none";
 
-    var passcodeEntered = localStorage.getItem("passcodeEntered");
-    if (passcodeEntered === "true") {
-        document.getElementById("content").style.display = "block";
-        document.getElementById("myTopnav").style.display = "block";
-        document.getElementById("passcode-form").style.display = "none";
-    }
+    async function checkAuthentication() {
+        const user = supabase.auth.user();
+        if (user) {
+            const { data, error } = await supabase
+                .from('users')
+                .select('passcodeEntered')
+                .eq('id', user.id);
 
-    function hEncode(str) {
-        let hStr = '';
-        for (let i = 0; i < str.length; i++) {
-            hStr += str.charCodeAt(i).toString(16);
+            if (data.length > 0 && data[0].passcodeEntered) {
+                document.getElementById("content").style.display = "block";
+                document.getElementById("myTopnav").style.display = "block";
+                document.getElementById("passcode-form").style.display = "none";
+            }
+        } else {
+            console.log("No user is logged in.");
         }
-        return hStr;
-    }
-
-    function eEF(str) {
-        let result = '';
-        for (let i = 4; i < str.length; i += 5) {
-            result += str[i];
-        }
-        return result;
     }
 
     async function authenticate() {
@@ -108,7 +109,7 @@
         const lockoutDuration = 30 * 60 * 1000; // 30 minutes in milliseconds
 
         const passcode = document.getElementById("passcode").value;
-        const encodedPasscode = btoa(hEncode(hEncode(passcode)));
+        const encodedPasscode = btoa(passcode); // Encode the passcode
 
         let attempts = parseInt(localStorage.getItem("attempts") || "0");
         let lockoutTime = parseInt(localStorage.getItem("lockoutTime") || "0");
@@ -139,12 +140,19 @@
 
         let response = await fetch('https://raw.githubusercontent.com/MCRed2024/urlfetcher/main/fetcher.txt');
         let fullResponse = await response.text();
-        let encodedPassword = eEF(eEF(fullResponse));
+        let encodedPassword = btoa(fullResponse.trim()); // Assuming your password is encoded
 
-        if (encodedPasscode === encodedPassword.trim()) {
+        if (encodedPasscode === encodedPassword) {
+            const user = supabase.auth.user(); // Get the current user after authentication
+            if (user) {
+                // Update Supabase to set passcodeEntered to true
+                const { data, error } = await supabase
+                    .from('users')
+                    .update({ passcodeEntered: true })
+                    .eq('id', user.id);
+            }
             document.getElementById("content").style.display = "block";
             document.getElementById("myTopnav").style.display = "block";
-            localStorage.setItem("passcodeEntered", "true");
             document.getElementById("passcode-form").style.display = "none";
             localStorage.removeItem("attempts");
         } else {
@@ -169,13 +177,22 @@
         }
     });
 
-    document.getElementById("logout").addEventListener("click", function() {
-        // Remove the passcodeEntered variable from localStorage
-        localStorage.removeItem("passcodeEntered");
-        
+    document.getElementById("logout").addEventListener("click", async function() {
+        const user = supabase.auth.user();
+        if (user) {
+            // Update Supabase to set passcodeEntered to false
+            await supabase
+                .from('users')
+                .update({ passcodeEntered: false })
+                .eq('id', user.id);
+        }
+
         // Reload the page
         location.reload();
     });
+
+    // Check authentication status on page load
+    checkAuthentication();
 </script>
 
 </body>
