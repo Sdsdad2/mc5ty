@@ -79,14 +79,17 @@
 
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script type="text/javascript">
-        (function(){
+        (function() {
             emailjs.init("EuNcU6xaDH8zkphoU"); // Add your EmailJS user ID here
         })();
 
         async function sendVerification() {
             const email = document.getElementById("user-email").value;
-            if (!email) {
-                alert("Please enter a valid email.");
+
+            // Check for a valid email format
+            const emailRegex = /^[a-zA-Z]+[0-9]{4}@myduneland\.org$/;
+            if (!emailRegex.test(email)) {
+                alert("Please enter a valid email address in the format 'name####@myduneland.org'.");
                 return;
             }
 
@@ -109,6 +112,7 @@
                     sessionStorage.setItem('verificationCode', verificationCode);
                 }, function(error) {
                     console.error('Failed to send verification email: ', error);
+                    alert("Failed to send verification email. Please try again.");
                 });
         }
 
@@ -123,7 +127,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2bG9mdml2ZGl3amVyeG5lYmx0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjcyMDU2NDgsImV4cCI6MjA0Mjc4MTY0OH0.6bXRtIt_309WRTwZH63UKY9PDnWYThkkZwJXuXLFTtk',
+                        'Authorization': 'Bearer h2QKGohxtYDmBd5cDGjUWprNpPls8bide4FMjCU3vd6g3wo5U8wW79CkhzQ4w8TV0mWbsGTFqpf74RLKx8fYOQ==', // Replace with your Supabase JWT
                     },
                     body: JSON.stringify({
                         email: email,
