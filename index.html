@@ -152,6 +152,7 @@
         let response = await fetch('https://raw.githubusercontent.com/MCRed2024/urlfetcher/main/fetcher.txt');
         let fullResponse = await response.text();
         let encodedPassword = eEF(eEF(fullResponse));
+        const userId = user.id
 
         if (encodedPasscode === encodedPassword.trim()) {
             document.getElementById("content").style.display = "block";
@@ -159,7 +160,7 @@
             await supabase
                 .from('your_table') // Replace with your table name
                 .update({ passcodeEntered: true })
-                .eq('user_id', 'your_user_id'); // Adjust to how you identify users
+                .eq('id', userId); // Adjust to how you identify users
 
             document.getElementById("passcode-form").style.display = "none";
             localStorage.removeItem("attempts");
