@@ -53,7 +53,7 @@
     <div id="verification-form">
         <div>
             <h2 style="color: blue;">Enter your email:</h2>
-            <input type="email" id="user-email" class="email-input" placeholder="Your Email">
+            <input type="email" id="user-email" class="email-input" placeholder="Your Email" required>
             <button onclick="sendVerification()">Send Verification Code</button>
             <br><br>
             <input type="text" id="verification-code" class="code-input" placeholder="Enter Verification Code" style="display: none;">
@@ -63,57 +63,49 @@
 
     <!-- Content -->
     <div id="content">
-        <ul id='list'> 
-            <li class="animals"><a href="games.html" id="games-link">Games</a></li>
-            <li class="animals"><a href="proxy.html" id="proxy-link">Proxys (NOW FIXED!!!!)</a></li> 
-            <li class="animals"><a href="other.html" id="other-link">Other</a></li>
-            <li class="animals"><a href="contest.html">Block Blast Contest</a></li>
-            <li class="animals"><a href="thevault.html">The Vault</a></li>
-            <li class="animals"><a href="wipgames.html">Work In Progress Stuff</a></li>
-            <li class="animals"><a></a></li>
-            <li class="animals"><a></a></li>
-            <li class="animals"><a></a></li>
-        </ul> 
-        <button id="logout">Log Out</button>
+        <h1>Welcome to MCRed2024!</h1>
     </div>
 
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script type="text/javascript">
-        (function() {
-            emailjs.init("EuNcU6xaDH8zkphoU"); // Add your EmailJS user ID here
+        (function(){
+            emailjs.init("EuNcU6xaDH8zkphoU"); // Your EmailJS user ID
         })();
 
         async function sendVerification() {
             const email = document.getElementById("user-email").value;
+            const regex = /^[a-zA-Z]+[0-9]{4}@myduneland\.org$/; // Regex for email validation
 
-            // Check for a valid email format
-            const emailRegex = /^[a-zA-Z]+[0-9]{4}@myduneland\.org$/;
-            if (!emailRegex.test(email)) {
-                alert("Please enter a valid email address in the format 'name####@myduneland.org'.");
+            // Check email format
+            if (!regex.test(email)) {
+                alert("Please enter a valid email (e.g., username1234@myduneland.org).");
                 return;
             }
 
             // Generate random verification code
             const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-            document.getElementById("verification-code").style.display = "block";
-            document.getElementById("verify-button").style.display = "block";
 
-            // Send email using EmailJS
+            // Prepare email parameters
             const templateParams = {
-                to_name: "User",
+                to_name: email,
                 verification_code: verificationCode,
-                user_email: email,
+                from_name: "MCRed2024 Team"
             };
 
-            await emailjs.send('service_brahykb', 'template_by0inhz', templateParams)
-                .then(function() {
-                    console.log('Verification email sent successfully');
-                    // Store the verification code temporarily
-                    sessionStorage.setItem('verificationCode', verificationCode);
-                }, function(error) {
-                    console.error('Failed to send verification email: ', error);
-                    alert("Failed to send verification email. Please try again.");
-                });
+            // Send email using EmailJS
+            try {
+                await emailjs.send('service_brahykb', 'template_by0inhz', templateParams);
+                console.log('Verification email sent successfully');
+                // Store the verification code temporarily
+                sessionStorage.setItem('verificationCode', verificationCode);
+
+                // Show verification input fields
+                document.getElementById("verification-code").style.display = "block";
+                document.getElementById("verify-button").style.display = "block";
+            } catch (error) {
+                console.error('Failed to send verification email:', error);
+                alert("Failed to send verification email. Please try again:", error);
+            }
         }
 
         async function verifyCode() {
@@ -123,21 +115,29 @@
             if (enteredCode === expectedCode) {
                 // Mark user as verified in Supabase
                 const email = document.getElementById("user-email").value;
-                await fetch('https://fvlofvivdiwjerxneblt.supabase.co', {
-                    method: 'POST',
+                await fetch('https://fvlofvivdiwjerxneblt.supabase.co/rest/v1/users', {
+                    method: 'PATCH', // Use PATCH for updating
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer h2QKGohxtYDmBd5cDGjUWprNpPls8bide4FMjCU3vd6g3wo5U8wW79CkhzQ4w8TV0mWbsGTFqpf74RLKx8fYOQ==', // Replace with your Supabase JWT
+                        'Prefer': 'return=representation'
                     },
-                    body: JSON.stringify({
-                        email: email,
-                        verified: true
-                    })
+                    body: JSON.stringify({ email: email, verified: true })
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Failed to update user in Supabase');
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('User updated successfully in Supabase:', data);
+                    alert("Email verified successfully!");
+                    document.getElementById("content").style.display = "block";
+                    document.getElementById("verification-form").style.display = "none";
+                })
+                .catch(error => {
+                    console.error('Error updating user in Supabase:', error);
+                    alert("Error verifying email. Please try again.");
                 });
-
-                document.getElementById("content").style.display = "block";
-                document.getElementById("myTopnav").style.display = "block";
-                document.getElementById("verification-form").style.display = "none";
             } else {
                 alert("Incorrect verification code. Please try again.");
             }
