@@ -37,6 +37,8 @@
     display: none;
 }
 </style>
+<!-- Include CryptoJS Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
 </head>
 <body>
 <div class="topnav" id="myTopnav">
@@ -80,27 +82,11 @@
 <script>
     document.getElementById("myTopnav").style.display = "none";
 
-    var passcodeEntered = localStorage.getItem("passcodeEntered");
-    if (passcodeEntered === "true") {
+    var enteredPasscode = localStorage.getItem("enteredPasscode");
+    if (enteredPasscode) {
         document.getElementById("content").style.display = "block";
         document.getElementById("myTopnav").style.display = "block";
         document.getElementById("passcode-form").style.display = "none";
-    }
-
-    function hEncode(str) {
-        let hStr = '';
-        for (let i = 0; i < str.length; i++) {
-            hStr += str.charCodeAt(i).toString(16);
-        }
-        return hStr;
-    }
-
-    function eEF(str) {
-        let result = '';
-        for (let i = 4; i < str.length; i += 5) {
-            result += str[i];
-        }
-        return result;
     }
 
     async function authenticate() {
@@ -108,7 +94,10 @@
         const lockoutDuration = 30 * 60 * 1000; // 30 minutes in milliseconds
 
         const passcode = document.getElementById("passcode").value;
-        const encodedPasscode = btoa(hEncode(hEncode(passcode)));
+
+        localStorage.setItem("enteredPasscode", passcode); // Save the entered passcode in localStorage
+
+        const hashedPasscode = CryptoJS.MD5(passcode).toString(); // Hash the entered passcode with MD5
 
         let attempts = parseInt(localStorage.getItem("attempts") || "0");
         let lockoutTime = parseInt(localStorage.getItem("lockoutTime") || "0");
@@ -139,12 +128,10 @@
 
         let response = await fetch('https://raw.githubusercontent.com/MCRed2024/urlfetcher/main/fetcher.txt');
         let fullResponse = await response.text();
-        let encodedPassword = eEF(eEF(fullResponse));
 
-        if (encodedPasscode === encodedPassword.trim()) {
+        if (hashedPasscode === fullResponse.trim()) {
             document.getElementById("content").style.display = "block";
             document.getElementById("myTopnav").style.display = "block";
-            localStorage.setItem("passcodeEntered", "true");
             document.getElementById("passcode-form").style.display = "none";
             localStorage.removeItem("attempts");
         } else {
@@ -162,7 +149,7 @@
     }
 
     window.addEventListener('storage', function(event) {
-        if (event.key === "passcodeEntered" && event.newValue === "true") {
+        if (event.key === "enteredPasscode" && event.newValue) {
             document.getElementById("content").style.display = "block";
             document.getElementById("myTopnav").style.display = "block";
             document.getElementById("passcode-form").style.display = "none";
@@ -170,8 +157,8 @@
     });
 
     document.getElementById("logout").addEventListener("click", function() {
-        // Remove the passcodeEntered variable from localStorage
-        localStorage.removeItem("passcodeEntered");
+        // Remove the enteredPasscode variable from localStorage
+        localStorage.removeItem("enteredPasscode");
         
         // Reload the page
         location.reload();
