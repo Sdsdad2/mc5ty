@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>MCRed2024</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCRed2024</title>
     <link rel="icon" href="IMG_1722.png" />
     <link rel="apple-touch-icon" sizes="192x192" href="IMG_1722.png"> 
     <link rel="manifest" href="manifest.json">
@@ -22,17 +23,14 @@
             align-items: center;
             z-index: 9999;
         }
-
         .passcode-input, .email-input, .code-input {
             width: 300px;
             padding: 10px;
             font-size: 18px;
         }
-
         #content {
             display: none;
         }
-
         #myTopnav {
             display: none;
         }
@@ -53,7 +51,7 @@
     <div id="verification-form">
         <div>
             <h2 style="color: blue;">Enter your email:</h2>
-            <input type="email" id="user-email" class="email-input" placeholder="Your Email" required>
+            <input type="email" id="user-email" class="email-input" placeholder="Your Email">
             <button onclick="sendVerification()">Send Verification Code</button>
             <br><br>
             <input type="text" id="verification-code" class="code-input" placeholder="Enter Verification Code" style="display: none;">
@@ -63,49 +61,54 @@
 
     <!-- Content -->
     <div id="content">
-        <h1>Welcome to MCRed2024!</h1>
+        <ul id='list'> 
+            <li class="animals"><a href="games.html" id="games-link">Games</a></li>
+            <li class="animals"><a href="proxy.html" id="proxy-link">Proxys (NOW FIXED!!!!)</a></li> 
+            <li class="animals"><a href="other.html" id="other-link">Other</a></li>
+            <li class="animals"><a href="contest.html">Block Blast Contest</a></li>
+            <li class="animals"><a href="thevault.html">The Vault</a></li>
+            <li class="animals"><a href="wipgames.html">Work In Progress Stuff</a></li>
+            <li class="animals"><a></a></li>
+            <li class="animals"><a></a></li>
+            <li class="animals"><a></a></li>
+        </ul> 
+        <button id="logout">Log Out</button>
     </div>
 
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script type="text/javascript">
         (function(){
-            emailjs.init("UMqz5Sd_CihKKcxpwqYGa"); // Your EmailJS user ID
+            emailjs.init("WkrP3e7nsTbEms8N7"); // Your EmailJS public ID
         })();
 
         async function sendVerification() {
             const email = document.getElementById("user-email").value;
-            const regex = /^[a-zA-Z]+[0-9]{4}@myduneland\.org$/; // Regex for email validation
-
-            // Check email format
+            const regex = /^[a-zA-Z]+[0-9]{4}@myduneland\.org$/; // Regex to match the email format
             if (!regex.test(email)) {
-                alert("Please enter a valid school email.");
+                alert("Please enter a valid email in the format: nameXXXX@myduneland.org");
                 return;
             }
 
             // Generate random verification code
             const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+            document.getElementById("verification-code").style.display = "block";
+            document.getElementById("verify-button").style.display = "block";
 
-            // Prepare email parameters
+            // Send email using EmailJS
             const templateParams = {
                 to_name: email,
                 verification_code: verificationCode,
-                from_name: "MCRed2024 Team"
             };
 
-            // Send email using EmailJS
-            try {
-                await emailjs.send('service_brahykb', 'template_by0inhz', templateParams);
-                console.log('Verification email sent successfully');
-                // Store the verification code temporarily
-                sessionStorage.setItem('verificationCode', verificationCode);
-
-                // Show verification input fields
-                document.getElementById("verification-code").style.display = "block";
-                document.getElementById("verify-button").style.display = "block";
-            } catch (error) {
-                console.error('Failed to send verification email:', error);
-                alert("Failed to send verification email. Please try again:", error);
-            }
+            await emailjs.send('service_brahykb', 'template_by0inhz', templateParams)
+                .then(function() {
+                    console.log('Verification email sent successfully');
+                    // Store the verification code temporarily
+                    sessionStorage.setItem('verificationCode', verificationCode);
+                }, function(error) {
+                    console.error('Failed to send verification email: ', error);
+                    alert('Failed to send verification email. Please try again.');
+                });
         }
 
         async function verifyCode() {
@@ -115,29 +118,21 @@
             if (enteredCode === expectedCode) {
                 // Mark user as verified in Supabase
                 const email = document.getElementById("user-email").value;
-                await fetch('https://fvlofvivdiwjerxneblt.supabase.co/rest/v1/users', {
-                    method: 'PATCH', // Use PATCH for updating
+                await fetch('https://fvlofvivdiwjerxneblt.supabase.co', {
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer h2QKGohxtYDmBd5cDGjUWprNpPls8bide4FMjCU3vd6g3wo5U8wW79CkhzQ4w8TV0mWbsGTFqpf74RLKx8fYOQ==', // Replace with your Supabase JWT
-                        'Prefer': 'return=representation'
                     },
-                    body: JSON.stringify({ email: email, verified: true })
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error('Failed to update user in Supabase');
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('User updated successfully in Supabase:', data);
-                    alert("Email verified successfully!");
-                    document.getElementById("content").style.display = "block";
-                    document.getElementById("verification-form").style.display = "none";
-                })
-                .catch(error => {
-                    console.error('Error updating user in Supabase:', error);
-                    alert("Error verifying email. Please try again.");
+                    body: JSON.stringify({
+                        email: email,
+                        verified: true
+                    })
                 });
+
+                document.getElementById("content").style.display = "block";
+                document.getElementById("myTopnav").style.display = "block";
+                document.getElementById("verification-form").style.display = "none";
             } else {
                 alert("Incorrect verification code. Please try again.");
             }
@@ -148,6 +143,5 @@
             location.reload();
         });
     </script>
-
 </body>
 </html>
