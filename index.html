@@ -77,31 +77,42 @@
     <button id="logout">Log Out</button>
 </div>
 
-<!-- Supabase JS library -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 <script>
-    const SUPABASE_URL = 'https://ghgyfpjsxtpeyvkljhko.supabase.co'; // Replace with your Supabase URL
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdoZ3lmcGpzeHRwZXl2a2xqaGtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjcyODA2NTksImV4cCI6MjA0Mjg1NjY1OX0.ulZtQqRcPtD_OXR8cJLSaETjiUT8OLPR7ttm-q0hHqQ'; // Replace with your Supabase ANON key
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Initialize Supabase
+    const supabaseUrl = 'https://ghgyfpjsxtpeyvkljhko.supabase.co'; // Replace with your Supabase URL
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdoZ3lmcGpzeHRwZXl2a2xqaGtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjcyODA2NTksImV4cCI6MjA0Mjg1NjY1OX0.ulZtQqRcPtD_OXR8cJLSaETjiUT8OLPR7ttm-q0hHqQ'; // Replace with your Supabase anon key
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
     document.getElementById("myTopnav").style.display = "none";
 
-    async function checkAuthentication() {
-        const user = supabase.auth.user();
-        if (user) {
-            const { data, error } = await supabase
-                .from('users')
-                .select('passcodeEntered')
-                .eq('id', user.id);
+    async function checkPasscodeEntered() {
+        const { data, error } = await supabase
+            .from('your_table') // Replace with your table name
+            .select('passcodeEntered')
+            .eq('user_id', 'your_user_id'); // Adjust to how you identify users
 
-            if (data.length > 0 && data[0].passcodeEntered) {
-                document.getElementById("content").style.display = "block";
-                document.getElementById("myTopnav").style.display = "block";
-                document.getElementById("passcode-form").style.display = "none";
-            }
-        } else {
-            console.log("No user is logged in.");
+        if (data.length > 0 && data[0].passcodeEntered) {
+            document.getElementById("content").style.display = "block";
+            document.getElementById("myTopnav").style.display = "block";
+            document.getElementById("passcode-form").style.display = "none";
         }
+    }
+
+    function hEncode(str) {
+        let hStr = '';
+        for (let i = 0; i < str.length; i++) {
+            hStr += str.charCodeAt(i).toString(16);
+        }
+        return hStr;
+    }
+
+    function eEF(str) {
+        let result = '';
+        for (let i = 4; i < str.length; i += 5) {
+            result += str[i];
+        }
+        return result;
     }
 
     async function authenticate() {
@@ -109,7 +120,7 @@
         const lockoutDuration = 30 * 60 * 1000; // 30 minutes in milliseconds
 
         const passcode = document.getElementById("passcode").value;
-        const encodedPasscode = btoa(passcode); // Encode the passcode
+        const encodedPasscode = btoa(hEncode(hEncode(passcode)));
 
         let attempts = parseInt(localStorage.getItem("attempts") || "0");
         let lockoutTime = parseInt(localStorage.getItem("lockoutTime") || "0");
@@ -140,19 +151,16 @@
 
         let response = await fetch('https://raw.githubusercontent.com/MCRed2024/urlfetcher/main/fetcher.txt');
         let fullResponse = await response.text();
-        let encodedPassword = btoa(fullResponse.trim()); // Assuming your password is encoded
+        let encodedPassword = eEF(eEF(fullResponse));
 
-        if (encodedPasscode === encodedPassword) {
-            const user = supabase.auth.user(); // Get the current user after authentication
-            if (user) {
-                // Update Supabase to set passcodeEntered to true
-                const { data, error } = await supabase
-                    .from('users')
-                    .update({ passcodeEntered: true })
-                    .eq('id', user.id);
-            }
+        if (encodedPasscode === encodedPassword.trim()) {
             document.getElementById("content").style.display = "block";
             document.getElementById("myTopnav").style.display = "block";
+            await supabase
+                .from('your_table') // Replace with your table name
+                .update({ passcodeEntered: true })
+                .eq('user_id', 'your_user_id'); // Adjust to how you identify users
+
             document.getElementById("passcode-form").style.display = "none";
             localStorage.removeItem("attempts");
         } else {
@@ -178,21 +186,18 @@
     });
 
     document.getElementById("logout").addEventListener("click", async function() {
-        const user = supabase.auth.user();
-        if (user) {
-            // Update Supabase to set passcodeEntered to false
-            await supabase
-                .from('users')
-                .update({ passcodeEntered: false })
-                .eq('id', user.id);
-        }
-
+        // Remove the passcodeEntered variable from Supabase
+        await supabase
+            .from('users') // Replace with your table name
+            .update({ passcodeEntered: false })
+            .eq('id', userId); // Use the variable containing the authenticated user's ID
+        
         // Reload the page
         location.reload();
     });
 
-    // Check authentication status on page load
-    checkAuthentication();
+    // Check if passcode has been entered at page load
+    checkPasscodeEntered();
 </script>
 
 </body>
