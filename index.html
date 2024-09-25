@@ -77,26 +77,14 @@
     <button id="logout">Log Out</button>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 <script>
-    // Initialize Supabase
-    const supabaseUrl = 'https://ghgyfpjsxtpeyvkljhko.supabase.co'; // Replace with your Supabase URL
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdoZ3lmcGpzeHRwZXl2a2xqaGtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjcyODA2NTksImV4cCI6MjA0Mjg1NjY1OX0.ulZtQqRcPtD_OXR8cJLSaETjiUT8OLPR7ttm-q0hHqQ'; // Replace with your Supabase anon key
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
     document.getElementById("myTopnav").style.display = "none";
 
-    async function checkPasscodeEntered() {
-        const { data, error } = await supabase
-            .from('your_table') // Replace with your table name
-            .select('passcodeEntered')
-            .eq('user_id', 'your_user_id'); // Adjust to how you identify users
-
-        if (data.length > 0 && data[0].passcodeEntered) {
-            document.getElementById("content").style.display = "block";
-            document.getElementById("myTopnav").style.display = "block";
-            document.getElementById("passcode-form").style.display = "none";
-        }
+    var passcodeEntered = localStorage.getItem("passcodeEntered");
+    if (passcodeEntered === "true") {
+        document.getElementById("content").style.display = "block";
+        document.getElementById("myTopnav").style.display = "block";
+        document.getElementById("passcode-form").style.display = "none";
     }
 
     function hEncode(str) {
@@ -152,16 +140,11 @@
         let response = await fetch('https://raw.githubusercontent.com/MCRed2024/urlfetcher/main/fetcher.txt');
         let fullResponse = await response.text();
         let encodedPassword = eEF(eEF(fullResponse));
-        const userId = user.id
 
         if (encodedPasscode === encodedPassword.trim()) {
             document.getElementById("content").style.display = "block";
             document.getElementById("myTopnav").style.display = "block";
-            await supabase
-                .from('your_table') // Replace with your table name
-                .update({ passcodeEntered: true })
-                .eq('id', userId); // Adjust to how you identify users
-
+            localStorage.setItem("passcodeEntered", "true");
             document.getElementById("passcode-form").style.display = "none";
             localStorage.removeItem("attempts");
         } else {
@@ -186,19 +169,13 @@
         }
     });
 
-    document.getElementById("logout").addEventListener("click", async function() {
-        // Remove the passcodeEntered variable from Supabase
-        await supabase
-            .from('users') // Replace with your table name
-            .update({ passcodeEntered: false })
-            .eq('id', userId); // Use the variable containing the authenticated user's ID
+    document.getElementById("logout").addEventListener("click", function() {
+        // Remove the passcodeEntered variable from localStorage
+        localStorage.removeItem("passcodeEntered");
         
         // Reload the page
         location.reload();
     });
-
-    // Check if passcode has been entered at page load
-    checkPasscodeEntered();
 </script>
 
 </body>
