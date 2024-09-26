@@ -81,7 +81,27 @@
 
 <script>
     document.getElementById("myTopnav").style.display = "none";
-
+    
+    checkPasscode();
+    
+    async function checkPasscode() {
+        const enteredPasscode = localStorage.getItem("enteredPasscode");
+        if (enteredPasscode) {
+          const hashedPasscode = CryptoJS.MD5(enteredPasscode).toString();
+          try {
+            const response = await fetch("https://raw.githubusercontent.com/MCRed2024/urlfetcher/main/fetcher.txt");
+            const rawText = await response.text();
+            if (hashedPasscode !== rawText) {
+              window.location.href = "index.html";
+            }
+          } catch (error) {
+            window.location.href = "index.html";
+          }
+        } else {
+          window.location.href = "index.html";
+        }
+      }
+    
     async function authenticate() {
         const maxAttempts = 3;
         const lockoutDuration = 30 * 60 * 1000; // 30 minutes in milliseconds
