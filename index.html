@@ -82,22 +82,12 @@
 <script>
     document.getElementById("myTopnav").style.display = "none";
 
-    const hashed = CryptoJS.MD5(enteredPasscode).toString();
-    const r = await fetch("https://raw.githubusercontent.com/MCRed2024/urlfetcher/main/fetcher.txt");
-    const rText = await response.text();
-    if (hashed == rText) {
-        document.getElementById("content").style.display = "block";
-        document.getElementById("myTopnav").style.display = "block";
-        document.getElementById("passcode-form").style.display = "none";
-    
     async function authenticate() {
         const maxAttempts = 3;
         const lockoutDuration = 30 * 60 * 1000; // 30 minutes in milliseconds
 
         const passcode = document.getElementById("passcode").value;
-
         localStorage.setItem("enteredPasscode", passcode); // Save the entered passcode in localStorage
-
         const hashedPasscode = CryptoJS.MD5(passcode).toString(); // Hash the entered passcode with MD5
 
         let attempts = parseInt(localStorage.getItem("attempts") || "0");
