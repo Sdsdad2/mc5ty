@@ -323,11 +323,6 @@
   <script>
     checkPasscode();
     document.getElementById("defaultOpen").click();
-    // Check if passcodeEntered is true in localStorage
-    var passcodeEntered = localStorage.getItem('passcodeEntered');
-    if (passcodeEntered) {
-      document.getElementById('content').style.display = 'block';
-    }
 
     function openPage(pageName, elmnt, color) {
       var i, tabcontent, tablinks;
