@@ -7,13 +7,13 @@ body {
 
 .topnav {
   overflow: hidden;
-  background-color: dark_orange;
+  background-color: black;
 }
 
 .topnav a {
   float: left;
   display: block;
-  color: dark_orange;
+  color: blue;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -22,11 +22,11 @@ body {
 
 .topnav a:hover {
   background-color: red;
-  color: dark_orange;
+  color: black;
 }
 
 .topnav a.active {
-  background-color: dark_orange;
+  background-color: blue;
   color: black;
 }
 
@@ -72,14 +72,14 @@ body {
   padding: 6px 10px;
   margin-top: 8px;
   margin-right: 16px;
-  background: dark_orange;
+  background: black;
   font-size: 17px;
   border: none;
   cursor: pointer;
 }
 
 .topnav .search-container button:hover {
-  background: dark_orange;
+  background: black;
 }
 
 @media screen and (max-width: 600px) {
@@ -111,7 +111,7 @@ body{
   background-size: cover;
   background-position: center;
   background-repeat: repeat-y;
-  
+
 }
 #hiddenList{
   text-decoration: none;
