@@ -22,7 +22,7 @@ body {
 
 .topnav a:hover {
   background-color: red;
-  color: black;
+  color: dark_orange;
 }
 
 .topnav a.active {
@@ -72,14 +72,14 @@ body {
   padding: 6px 10px;
   margin-top: 8px;
   margin-right: 16px;
-  background: black;
+  background: dark_orange;
   font-size: 17px;
   border: none;
   cursor: pointer;
 }
 
 .topnav .search-container button:hover {
-  background: black;
+  background: dark_orange;
 }
 
 @media screen and (max-width: 600px) {
