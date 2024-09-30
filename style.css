@@ -13,7 +13,7 @@ body {
 .topnav a {
   float: left;
   display: block;
-  color: blue;
+  color: dark_orange;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -27,7 +27,7 @@ body {
 
 .topnav a.active {
   background-color: dark_orange;
-  color: orange;
+  color: black;
 }
 
 .topnav .icon {
@@ -107,7 +107,7 @@ body {
   border-color: blue!important;
 }
 body{
-  background-image: url('https://raw.githubusercontent.com/MCRed2024/MCRed2024.github.io/main/IMG_2267.jpeg');
+  background-image: url('https://raw.githubusercontent.com/MCRed2024/MCRed2024.github.io/main/IMG_2053.png');
   background-size: cover;
   background-position: center;
   background-repeat: repeat-y;
