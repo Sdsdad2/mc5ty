@@ -7,7 +7,7 @@ body {
 
 .topnav {
   overflow: hidden;
-  background-color: black;
+  background-color: dark_orange;
 }
 
 .topnav a {
@@ -26,8 +26,8 @@ body {
 }
 
 .topnav a.active {
-  background-color: blue;
-  color: black;
+  background-color: dark_orange;
+  color: orange;
 }
 
 .topnav .icon {
@@ -107,7 +107,7 @@ body {
   border-color: blue!important;
 }
 body{
-  background-image: url('https://raw.githubusercontent.com/MCRed2024/MCRed2024.github.io/main/IMG_2053.png');
+  background-image: url('https://raw.githubusercontent.com/MCRed2024/MCRed2024.github.io/main/IMG_2267.jpeg');
   background-size: cover;
   background-position: center;
   background-repeat: repeat-y;
