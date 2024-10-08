@@ -342,31 +342,33 @@
     async function checkPasscode() {
         const enteredPasscode = localStorage.getItem("enteredPasscode");
         if (enteredPasscode) {
-          const hashedPasscode = CryptoJS.MD5(enteredPasscode).toString();
-          try {
-            const response = await fetch("https://raw.githubusercontent.com/MCRed2024/urlfetcher/main/fetcher.txt");
-            const rawText = await response.text();
-            if (hashedPasscode !== rawText) {
-              window.location.href = "index.html";
+            const hashedPasscode = CryptoJS.MD5(enteredPasscode).toString();
+            try {
+                const response = await fetch("https://raw.githubusercontent.com/MCRed2024/urlfetcher/main/fetcher.txt");
+                const rawText = await response.text();
+                if (hashedPasscode !== rawText.trim) {
+                    window.location.href = "index.html";
+                }
+            } catch (error) {
+                window.location.href = "index.html";
             }
-          } catch (error) {
-            window.location.href = "index.html";
-          }
         } else {
-          window.location.href = "index.html";
+            window.location.href = "index.html";
         }
-      }
-    
+    }
+   
     // Function to search games
-    function search_animal() {
+function search_animal() {
     var input, filter, ul, li, a, i, txtValue;
     input = document.getElementById('searchbar');
     filter = input.value.toUpperCase();
     ul = document.getElementById("list");
     li = ul.getElementsByTagName('li');
+    
     for (i = 0; i < li.length; i++) {
       a = li[i].getElementsByTagName("a")[0];
       txtValue = a.textContent || a.innerText;
+
       // Check if the item is searchable
       if (li[i].getAttribute('data-searchable') !== 'false') {
         // If the search filter matches, display the item
