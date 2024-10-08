@@ -349,18 +349,17 @@
 
                 // Compare hashedPasscode with fetched passcode
                 if (hashedPasscode === rawText.trim()) {
-                    // Allow access or perform any other logic for a successful match
-                    console.log("Access granted.");
+                 sessionStorage.setItem("accessStatus", "Access granted.");
                 } else {
-                    // Redirect if the passcode does not match
+                    sessionStorage.setItem("accessStatus", "Access denied. Incorrect passcode.");
                     window.location.href = "index.html";
                 }
             } catch (error) {
-                // Redirect on fetch error
+                sessionStorage.setItem("accessStatus", "Access denied due to fetch error.");
                 window.location.href = "index.html";
             }
         } else {
-            // Redirect if no passcode is found in localStorage
+            sessionStorage.setItem("accessStatus", "Access denied. No passcode found.");
             window.location.href = "index.html";
         }
     }
