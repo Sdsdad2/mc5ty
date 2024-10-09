@@ -1,35 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
+  <title>Iceman</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bookmarklets</title>
+  <link rel="icon" href="IMG_1486.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="IMG_1486.png"> 
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
+    /* Additional styles for bookmarklets */
+    #animals {
+      padding: 20px; /* Add padding to the container */
+    }
+
     .bookmarklet {
-      padding: 10px;
-      margin: 10px;
-      background-color: #f2f2f2;
-      border: 1px solid #ddd;
-      display: inline-block;
-    }
-
-    .bookmarklet a {
-      color: #007bff;
-      text-decoration: none;
-      font-size: 16px;
       padding: 5px 10px;
-      display: inline-block;
+      margin: 5px;
+      background-color: gray; /* Gray background */
+      color: white; /* White text */
+      border: none; /* No border */
+      border-radius: 15px; /* Rounded corners */
+      display: inline-block; /* Inline-block for horizontal layout */
+      font-size: 14px; /* Smaller font size */
+      text-align: center; /* Center text */
+      cursor: pointer; /* Pointer cursor */
+      transition: background-color 0.3s; /* Smooth background color transition */
     }
 
-    .bookmarklet a:hover {
-      text-decoration: underline;
+    .bookmarklet:hover {
+      background-color: #444; /* Darker gray on hover */
     }
   </style>
 </head>
 <body>
-  <h2>Bookmarklets</h2>
-
-  <div id="bookmarkletContainer"></div>
+  <div class="topnav">
+    <a href="index.html">Home</a>
+    <a href="games.html">Games</a>
+    <a href="proxy.html">Proxys</a>
+    <a class="active" href="other.html">Other</a>
+  </div>
+  <div id="animals">
+    <h2 style="color: white;">Bookmarklets</h2> <!-- Make the heading white -->
+    <div id="bookmarkletContainer"></div>
+  </div>
 
   <script>
     // Define the bookmarklets dictionary with name and content
@@ -44,7 +59,7 @@
       const container = document.getElementById('bookmarkletContainer');
       container.innerHTML = ''; // Clear the container before rendering
 
-      // Loop through each bookmarklet and create an anchor tag
+      // Loop through each bookmarklet and create an element
       for (const [name, content] of Object.entries(bookmarklets)) {
         const bookmarkletDiv = document.createElement('div');
         bookmarkletDiv.className = 'bookmarklet';
@@ -53,6 +68,7 @@
         const link = document.createElement('a');
         link.href = content;
         link.innerText = name;
+        link.style.color = 'inherit'; // Inherit color from parent div
 
         // Append the anchor tag to the bookmarklet div
         bookmarkletDiv.appendChild(link);
