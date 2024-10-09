@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookmarklets</title>
+  <style>
+    .bookmarklet {
+      padding: 10px;
+      margin: 10px;
+      background-color: #f2f2f2;
+      border: 1px solid #ddd;
+      display: inline-block;
+    }
+
+    .bookmarklet a {
+      color: #007bff;
+      text-decoration: none;
+      font-size: 16px;
+      padding: 5px 10px;
+      display: inline-block;
+    }
+
+    .bookmarklet a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h2>Bookmarklets</h2>
+
+  <div id="bookmarkletContainer"></div>
+
+  <script>
+    // Define the bookmarklets dictionary with name and content
+    const bookmarklets = {
+      "Google": "javascript:window.open('https://www.google.com')",
+      "YouTube": "javascript:window.open('https://www.youtube.com')",
+      "Bing": "javascript:window.open('https://www.bing.com')",
+    };
+
+    // Function to render the bookmarklets as links
+    function renderBookmarklets() {
+      const container = document.getElementById('bookmarkletContainer');
+      container.innerHTML = ''; // Clear the container before rendering
+
+      // Loop through each bookmarklet and create an anchor tag
+      for (const [name, content] of Object.entries(bookmarklets)) {
+        const bookmarkletDiv = document.createElement('div');
+        bookmarkletDiv.className = 'bookmarklet';
+
+        // Create an anchor tag for the bookmarklet
+        const link = document.createElement('a');
+        link.href = content;
+        link.innerText = name;
+
+        // Append the anchor tag to the bookmarklet div
+        bookmarkletDiv.appendChild(link);
+
+        // Append the bookmarklet div to the container
+        container.appendChild(bookmarkletDiv);
+      }
+    }
+
+    // Initial rendering of bookmarklets
+    window.onload = renderBookmarklets;
+  </script>
+</body>
+</html>
