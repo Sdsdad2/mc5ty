@@ -27,31 +27,9 @@
 
   <ul id='list'> 
       <!-- The original button that will replace the page content -->
-      <li class="animals"><a onclick="replaceContent()">Ultraviolet</a></li> 
+      <li class="animals"><a href="https://iceman505proxy.github.io">Ultraviolet</a></li> 
       <li class="animals"><a href="https://technerd.cyou/proxy" target="_blank">TechNerd</a></li> 
   </ul> 
-
-  <!-- JavaScript to handle content replacement -->
-  <script>
-    function replaceContent() {
-      // Get all elements except .topnav and remove them
-      var elementsToRemove = document.querySelectorAll('body > :not(.topnav)');
-      elementsToRemove.forEach(element => {
-        element.remove();
-      });
-
-      // Create and append the iframe
-      var iframe = document.createElement('iframe');
-      iframe.id = 'proxy-embed';
-      iframe.src = 'https://iceman505proxy.github.io/';
-      iframe.style.width = '100%';
-      iframe.style.height = '100vh';
-      iframe.style.border = 'none';
-      
-      document.body.appendChild(iframe);
-    }
-  </script>
-  
   <script src="script.js"></script>
 </body>
 </html>
