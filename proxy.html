@@ -1,17 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Iceman</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="IMG_1486.png" />
-<link rel="apple-touch-icon" sizes="192x192" href="IMG_1486.png"> 
-<link rel="manifest" href="manifest.json">
-<meta name="mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-
-</style>
+  <title>Iceman</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="IMG_1486.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="IMG_1486.png"> 
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .topnav a {
+      padding: 14px 20px;
+      text-decoration: none;
+      color: #333;
+    }
+    .topnav a.active {
+      background-color: #4CAF50;
+      color: white;
+    }
+    #proxy-embed {
+      width: 100%;
+      height: 100vh;
+      border: none;
+    }
+    .button-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .replace-button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .replace-button:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
   <div class="topnav">
@@ -22,14 +54,19 @@
   </div>
 
   <ul id='list'> 
-      <li class="animals"><a href="https://mcred2024.github.io/PROXY">Ultraviolet</a></li> 
-      <li class="animals"><a href="https://technerd.cyou/proxy">TechNerd</a></li> 
+      <!-- The original button that will replace the page content -->
+      <li class="animals"><button class="replace-button" onclick="replaceContent()">Ultraviolet</button></li> 
+      <li class="animals"><a href="https://technerd.cyou/proxy" target="_blank">TechNerd</a></li> 
   </ul> 
-  <div id="animals">
-  <script src="script.js">
+
+  <!-- JavaScript to handle content replacement -->
+  <script>
+    function replaceContent() {
+      // Replace the body content with the embedded iframe
+      document.body.innerHTML = '<iframe id="proxy-embed" src="https://mcred2024.github.io/PROXY"></iframe>';
+    }
   </script>
-
-
-
+  
+  <script src="script.js"></script>
 </body>
 </html>
