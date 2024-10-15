@@ -34,13 +34,13 @@
   <!-- JavaScript to handle content replacement -->
   <script>
     function replaceContent() {
-      // Select all elements except the .topnav and replace them
-      var content = document.querySelectorAll('body > :not(.topnav)');
-      content.forEach(element => {
-        element.innerHTML = ''; // Clear the content of each element
+      // Get all elements except .topnav and remove them
+      var elementsToRemove = document.querySelectorAll('body > :not(.topnav)');
+      elementsToRemove.forEach(element => {
+        element.remove();
       });
-      
-      // Append the iframe after the topnav
+
+      // Create and append the iframe
       var iframe = document.createElement('iframe');
       iframe.id = 'proxy-embed';
       iframe.src = 'https://mcred2024proxy.github.io/';
@@ -48,7 +48,8 @@
       iframe.style.height = '100vh';
       iframe.style.border = 'none';
       
-      document.body.appendChild(iframe)
+      document.body.appendChild(iframe);
+    }
   </script>
   
   <script src="script.js"></script>
