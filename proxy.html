@@ -27,22 +27,6 @@
       height: 100vh;
       border: none;
     }
-    .button-container {
-      text-align: center;
-      margin-top: 20px;
-    }
-    .replace-button {
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .replace-button:hover {
-      background-color: #45a049;
-    }
   </style>
 </head>
 <body>
@@ -55,7 +39,7 @@
 
   <ul id='list'> 
       <!-- The original button that will replace the page content -->
-      <li class="animals"><button class="replace-button" onclick="replaceContent()">Ultraviolet</button></li> 
+      <li class="animals"><a onclick="replaceContent()">Ultraviolet</a></li> 
       <li class="animals"><a href="https://technerd.cyou/proxy" target="_blank">TechNerd</a></li> 
   </ul> 
 
