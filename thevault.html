@@ -56,10 +56,10 @@
       'aidan': 'Ah, you know the owner, now do you?.',
       'clearly': 'You got that hint! Nice one!',
       'nope': 'Nope what? Whatever though, you got it right...',
-      'cheeseland': 'My enemy...',
+      'cheeseland': 'Gone, sadly...',
       'calvin': 'Cheeseland maker.',
       'jake': 'Duffman maker.',
-      'duffman': 'Yea, I stole that idea and made it better. Jake Fryer is the one to thank.',
+      'duffman': 'Yea, I stole that idea and made it better. Jake Fryer is the one to thank. JK he sucks!',
       'liam': 'Yea, Jake gave duffman to him for no reason.',
       'a113': 'You saw the hint, didnt you?',
       'canden': 'Co-Owner time!',
@@ -138,9 +138,11 @@
       const allCodesCompleted = allCodes.every(code => completedCodes.includes(code));
       if (allCodesCompleted) {
         localStorage.setItem('vaultCompleted', 'true');
+        localStorage.setItem('VaultAchivement', 'true');
         namePrompt.style.display = 'block';
       } else {
         localStorage.setItem('vaultCompleted', 'false');
+        localStorage.setItem('VaultAchivement', 'false');
         namePrompt.style.display = 'none';
       }
     }
