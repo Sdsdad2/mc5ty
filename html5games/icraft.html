@@ -11,15 +11,21 @@
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
-    #play-container {
-      width: 100vw;
-      height: 100%;
-      frameborder: 0;
-      border: 0;
+    #play {
+      display: none; /* Hidden by default, shown after validation */
+      color: blue;
+      text-align: center;
+      text-decoration: none;
+      font-family: 'arial';
+      font-size: 20px;
+      margin-bottom: 10px;
+      cursor: pointer;
     }
-    section {
-      width: 100%;
-      height: 100vh;
+    #play-count {
+      font-size: 14px;
+      color: blue;
+      text-align: center;
+      margin-top: 5px;
     }
   </style>
 </head>
@@ -30,12 +36,15 @@
     <a href="/proxy.html">Proxys</a>
     <a href="/other.html">Other</a>
   </div>
- 
-  <iframe frameborder="0" id="gameFrame"></iframe>
+
+  <div style="text-align: center;">
+    <a id="play"><h1>PLAY</h1></a>
+    <div id="play-count"></div>
+  </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
   <script>
-      async function checkPasscode() {
+    async function checkPasscode() {
         const enteredPasscode = localStorage.getItem("enteredPasscode");
         
         if (enteredPasscode) {
@@ -46,7 +55,8 @@
 
                 // Compare hashedPasscode with fetched passcode
                 if (hashedPasscode === rawText.trim()) {
-                 sessionStorage.setItem("accessStatus", "Access granted.");
+                    sessionStorage.setItem("accessStatus", "Access granted.");
+                    displayPlayButton(); // Display PLAY button after successful validation
                 } else {
                     sessionStorage.setItem("accessStatus", "Access denied. Incorrect passcode.");
                     window.location.href = "index.html";
@@ -60,20 +70,21 @@
             window.location.href = "index.html";
         }
     }
-    checkPasscode();
+
     // Unique identifier for this game page
     var pageID = 'mcredproxy.github.io/service/hvtrs8%2F-ilfknktg-arcfv.aoo%2F'; // Include the full URL here
 
-    // Retrieve entered passcode from localStorage
-    var enteredPasscode = localStorage.getItem('enteredPasscode');
-    var hashedEnteredPasscode = md5(enteredPasscode);
-
-    // Initialize play counter using the unique pageID
-    var playCount = localStorage.getItem('playCount_' + pageID) || 0;
-    playCount = parseInt(playCount);
+    // Display the PLAY button after passcode validation
+    function displayPlayButton() {
+      document.getElementById('play').style.display = 'block'; // Show PLAY button
+      updatePlayCount(); // Show play count
+    }
 
     // Function to update play count display
     function updatePlayCount() {
+      let playCount = localStorage.getItem('playCount_' + pageID) || 0;
+      playCount = parseInt(playCount);
+      
       let countText;
       if (playCount === 0) {
         countText = "You have not played this game yet.";
@@ -82,50 +93,25 @@
       } else {
         countText = "You have played this game " + playCount + " times.";
       }
-      return `<div id='play-count' style='font-size: 14px; color: blue; text-align: center; margin-top: 5px;'>${countText}</div>`;
+      document.getElementById('play-count').innerText = countText;
     }
 
-    // Fetch the hashed passcode from the raw GitHub content
-    async function fetchHashedPasscode() {
-      let response = await fetch('https://raw.githubusercontent.com/MCRed2024/urlfetcher/main/fetcher.txt');
-      let hashedPassword = await response.text();
-      return hashedPassword.trim();
-    }
+    // Function to handle the PLAY button click
+    document.getElementById('play').addEventListener('click', function() {
+      // Open the game in a new tab
+      window.open('https://' + pageID, '_blank');
 
-    // Set the srcdoc attribute of the iframe based on passcode verification
-    fetchHashedPasscode().then(hashedPassword => {
-      var passcodeValid = hashedEnteredPasscode === hashedPassword;
+      // Update play count after opening the game
+      let playCount = localStorage.getItem('playCount_' + pageID) || 0;
+      playCount = parseInt(playCount) + 1;
+      localStorage.setItem('playCount_' + pageID, playCount);
 
-      document.getElementById('gameFrame').srcdoc = `
-        <style>
-          #play {
-            color: blue;
-            text-align: center;
-            text-decoration: none;
-            font-family: 'arial';
-            font-size: 20px;
-            display: ${passcodeValid ? 'block' : 'none'};
-            margin-bottom: 10px;
-          }
-        </style>
-        <div style='text-align: center;'>
-          <a id='play' href='https://${pageID}'><h1>PLAY</h1></a>
-          ${updatePlayCount()}
-        </div>`;
+      // Update the displayed play count
+      updatePlayCount();
     });
 
-    // Add event listener for the play button
-    document.getElementById('gameFrame').addEventListener('load', function() {
-      var playButton = document.getElementById('gameFrame').contentWindow.document.getElementById('play');
-      
-      if (playButton) {
-        playButton.addEventListener('click', function() {
-          playCount += 1;
-          localStorage.setItem('playCount_' + pageID, playCount);
-          document.getElementById('gameFrame').contentWindow.document.getElementById('play-count').innerHTML = updatePlayCount();
-        });
-      }
-    });
+    // Call passcode check on page load
+    checkPasscode();
   </script>
 </body>
 </html>
