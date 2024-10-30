@@ -138,7 +138,6 @@
       const allCodesCompleted = allCodes.every(code => completedCodes.includes(code));
       if (allCodesCompleted) {
         localStorage.setItem('vaultCompleted', 'true');
-        localStorage.setItem('VaultAchivement', 'true');
         namePrompt.style.display = 'block';
       } else {
         localStorage.setItem('vaultCompleted', 'false');
