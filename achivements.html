@@ -7,11 +7,11 @@
   <link rel="apple-touch-icon" sizes="192x192" href="IMG_1486.png"> 
   <link rel="manifest" href="manifest.json">
   <meta name="mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-
-</style>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    /* Add any custom styles here */
+  </style>
 </head>
 <body>
   <div class="topnav">
@@ -23,17 +23,22 @@
 
   <ul id='list'>
       <li class="animals"><a style="font-size: 40px; color: blue">Achivements</a></li>
-      <li class="animals"><a id="vaultAch" style="color: yellow;">Beat The Vault</a></li>
+      <li class="animals"><a id="vaultAch" style="color: blue;">Beat The Vault</a></li>
       <li class="animals"><a style="color: black"></a></li>
       <li class="animals"><a style="font-size: 40px; color: blue">Hard Achivements (Screenshots)</a></li>
   </ul> 
-  <div id="animals">
-  <script src="script.js">
-    if (localStorage.getItem("vaultCompleted") === "true") {
-      document.getElementById('vaultAch').style.color = 'red';
-    } else {
-      document.getElementById('vaultAch').style.color = 'yellow';
-  </script>
+  <div id="animals"></div> <!-- Close the div properly -->
 
+  <script src="script.js"></script> <!-- Include your external script file -->
+  <script>
+    // JavaScript code to run after DOM is fully loaded
+    window.onload = function() {
+      if (localStorage.getItem("vaultCompleted") === "true") {
+        document.getElementById('vaultAch').style.color = 'yellow';
+      } else {
+        document.getElementById('vaultAch').style.color = 'blue';
+      }
+    };
+  </script>
 </body>
 </html>
